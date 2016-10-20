@@ -2,11 +2,11 @@
 
 #Экспериментальный скрипт
 
-cd $HOME/
-#rm index.html
+cd $HOME/In_work/SCLfolder/
+rm index.html
 touch index.html
 
-exec 2>$0.err
+#exec 2>$0.err
 
 echo "Введите начальный адрес aaa.bbb.jjj.iii через пробел" 
 read a b j i
@@ -14,70 +14,154 @@ x=$i
 y=$j
 z=$b
 g=$a
-#Проверка введенного адреса
+#Проверка введенного начального адреса
+type_x=0
+type_y=0
+type_z=0
+type_g=0
+# Проверка: является ли ввод числом?
+expr $g : '-\?[0-9]\+$' >/dev/null && type_g=1 || type_g=0
+expr $z : '-\?[0-9]\+$' >/dev/null && type_z=1 || type_z=0
+expr $y : '-\?[0-9]\+$' >/dev/null && type_y=1 || type_y=0
+expr $x : '-\?[0-9]\+$' >/dev/null && type_x=1 || type_x=0
+
+
 correct_g=0
-until [ $correct_g -eq 1]
+until [ $correct_g -eq 1 ]
 do
-	if (( $g >= 1 && $g <= 255 ))
+# Если введеное значение - число и оно принадлежит промежутку от 1 до 255 - все ок. 
+	if (( type_g == 1 && g >= 1 && g <= 255 ))
 		then
-			echo "$g допустимое значение"
+#			echo "$g допустимое значение"
 			break
 		else 
 			echo	"Введено недопустимое значение первого октета"
 			echo 	"Ведите новое значение первого октета _?_.bbb.jjj.iii от 1 до 255:"
 			read g
+			expr $g : '-\?[0-9]\+$' >/dev/null && type_g=1 || type_g=0
 	fi
 done
 a=$g
-correct_z=0
-until [ $correct_z -eq 1]
+until [ $correct_g -eq 1 ]
 do
-	if (( $z >= 0 && $z <= 255 ))
+	if (( type_z == 1 && z >= 0 && z <= 255 ))
 		then
-			echo "$z допустимое значение"
-			correct_z=1
+#			echo "$z допустимое значение"
 			break
 		else 
 			echo	"$z Введено недопустимое значение второго октета"
 			echo 	"Ведите новое значение второго октета $a._?_.jjj.iii от 0 до 255:"
 			read z
-			
+			expr $z : '-\?[0-9]\+$' >/dev/null && type_z=1 || type_z=0
 	fi
 done
 b=$z
-correct_y=0
-until [ $correct_y -eq 1]
+until [ $correct_g -eq 1 ]
 do
-	if (( $y >= 0 && $y <= 255 ))
+	if (( type_y==1 && y >= 0 && y <= 255 ))
 		then
-			echo "$y допустимое значение"
-			correct_y=1
+#			echo "$y допустимое значение"
 			break
 		else 
 			echo	"Введено недопустимое значение третьего октета"
 			echo 	"Ведите новое значение третьего октета $a.$b._?_.iii от 0 до 255:"
 			read y
+			expr $y : '-\?[0-9]\+$' >/dev/null && type_y=1 || type_y=0
 			
 	fi
 done
 j=$y
-correct_x=0
-until [ $correct_x -eq 1]
+until [ $correct_g -eq 1 ]
 do
-	if (( $x >= 1 && $x <= 255 ))
+	if (( type_x==1 && x >= 1 && x <= 255 ))
 		then
-			echo "$x допустимое значение"
-			correct_x=1
+#			echo "$x допустимое значение"
 			break
 		else 
 			echo	"Введено недопустимое значение четвертого октета"
 			echo 	"Ведите новое значение четвертого октета $a.$b.$j._?_ от 1 до 255:"
 			read x
+			expr $x : '-\?[0-9]\+$' >/dev/null && type_x=1 || type_x=0	
 	fi
 done
 i=$x
 echo "Введите конечный адрес aaa.bbb.jjj.iii через пробел" 
 read LIMIT_a LIMIT_b LIMIT_j LIMIT_i
+# Проверка введенного конечного адреса
+o=$LIMIT_a
+p=$LIMIT_b
+q=$LIMIT_j
+r=$LIMIT_i
+
+type_o=0
+type_p=0
+type_q=0
+type_r=0
+
+# Проверка: является ли ввод числом?
+expr $o : '-\?[0-9]\+$' >/dev/null && type_o=1 || type_o=0
+expr $p : '-\?[0-9]\+$' >/dev/null && type_p=1 || type_p=0
+expr $q : '-\?[0-9]\+$' >/dev/null && type_q=1 || type_q=0
+expr $r : '-\?[0-9]\+$' >/dev/null && type_r=1 || type_r=0
+
+until [ $correct_g -eq 1 ]
+do
+	if (( type_o==1 && o >= 1 && o <= 255 ))
+		then
+#			echo "$o допустимое значение"
+			break
+		else 
+			echo	"Введено недопустимое значение первого октета"
+			echo 	"Ведите новое значение первого октета _?_.bbb.jjj.iii от 1 до 255:"
+			read o
+			expr $o : '-\?[0-9]\+$' >/dev/null && type_o=1 || type_o=0
+	fi
+done
+LIMIT_a=$o
+until [ $correct_g -eq 1 ]
+do
+	if (( type_p=1 && p >= 0 && p <= 255 ))
+		then
+#			echo "$p допустимое значение"
+			break
+		else 
+			echo	"$p Введено недопустимое значение второго октета"
+			echo 	"Ведите новое значение второго октета $LIMIT_a._?_.jjj.iii от 0 до 255:"
+			read p
+			expr $p : '-\?[0-9]\+$' >/dev/null && type_p=1 || type_p=0
+	fi
+done
+LIMIT_b=$p
+until [ $correct_g -eq 1 ]
+do
+	if (( type_q==1 && q >= 0 && q <= 255 ))
+		then
+#			echo "$q допустимое значение"
+			break
+		else 
+			echo	"Введено недопустимое значение третьего октета"
+			echo 	"Ведите новое значение третьего октета $LIMIT_a.$LIMIT_b._?_.iii от 0 до 255:"
+			read q
+			expr $q : '-\?[0-9]\+$' >/dev/null && type_q=1 || type_q=0
+			
+	fi
+done
+LIMIT_j=$q
+until [ $correct_g -eq 1 ]
+do
+	if (( type_r=1 && r >= 1 && r <= 255 ))
+		then
+#			echo "$r допустимое значение"
+			break
+		else 
+			echo	"Введено недопустимое значение четвертого октета"
+			echo 	"Ведите новое значение четвертого октета $LIMIT_a.$LIMIT_b.$LIMIT_j._?_ от 1 до 255:"
+			read r
+			expr $r : '-\?[0-9]\+$' >/dev/null && type_r=1 || type_r=0
+	fi
+done
+LIMIT_i=$r
+
 echo "Сканируем диапазон адресов $a.$b.$j.$i - $LIMIT_a.$LIMIT_b.$LIMIT_j.$LIMIT_i"
 #Подсчет размера сети
 #let count4th=$LIMIT_i-$x
