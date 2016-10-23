@@ -1,268 +1,261 @@
 #!/bin/bash
 
-#Экспериментальный скрипт
-
-cd $HOME/In_work/SCLfolder/
-rm index.html
+exec 2>$0.err
+cd $HOME/NetScan/Logs
+rm index.html 
 touch index.html
 
-#exec 2>$0.err
+
 
 echo "Введите начальный адрес aaa.bbb.jjj.iii через пробел" 
-read a b j i
-x=$i
-y=$j
-z=$b
-g=$a
+read FirstOctet SecondOctet ThirdOctet FourthOctet
+tempVarFourth=$FourthOctet
+tempVarThird=$ThirdOctet
+tempVarSecond=$SecondOctet
+tempVarFirst=$FirstOctet
 #Проверка введенного начального адреса
-type_x=0
-type_y=0
-type_z=0
-type_g=0
+type_Fourth=0
+type_Third=0
+type_Second=0
+type_First=0
 # Проверка: является ли ввод числом?
-expr $g : '-\?[0-9]\+$' >/dev/null && type_g=1 || type_g=0
-expr $z : '-\?[0-9]\+$' >/dev/null && type_z=1 || type_z=0
-expr $y : '-\?[0-9]\+$' >/dev/null && type_y=1 || type_y=0
-expr $x : '-\?[0-9]\+$' >/dev/null && type_x=1 || type_x=0
+expr $tempVarFirst : '-\?[0-9]\+$' >/dev/null && type_First=1 || type_First=0
+expr $tempVarSecond : '-\?[0-9]\+$' >/dev/null && type_Second=1 || type_Second=0
+expr $tempVarThird : '-\?[0-9]\+$' >/dev/null && type_Third=1 || type_Third=0
+expr $tempVarFourth : '-\?[0-9]\+$' >/dev/null && type_Fourth=1 || type_Fourth=0
 
 
 correct_g=0
 until [ $correct_g -eq 1 ]
 do
 # Если введеное значение - число и оно принадлежит промежутку от 1 до 255 - все ок. 
-	if (( type_g == 1 && g >= 1 && g <= 255 ))
+	if (( type_First == 1 && tempVarFirst >= 1 && tempVarFirst <= 255 ))
 		then
-#			echo "$g допустимое значение"
+#			echo "$tempVarFirst допустимое значение"
 			break
-		else 
+		else 	
 			echo	"Введено недопустимое значение первого октета"
 			echo 	"Ведите новое значение первого октета _?_.bbb.jjj.iii от 1 до 255:"
-			read g
-			expr $g : '-\?[0-9]\+$' >/dev/null && type_g=1 || type_g=0
+			read tempVarFirst
+			expr $tempVarFirst : '-\?[0-9]\+$' >/dev/null && type_First=1 || type_First=0
 	fi
 done
-a=$g
+FirstOctet=$tempVarFirst
 until [ $correct_g -eq 1 ]
 do
-	if (( type_z == 1 && z >= 0 && z <= 255 ))
+	if (( type_Second == 1 && tempVarSecond >= 0 && tempVarSecond <= 255 ))
 		then
-#			echo "$z допустимое значение"
+#			echo "$tempVarSecond допустимое значение"
 			break
 		else 
-			echo	"$z Введено недопустимое значение второго октета"
-			echo 	"Ведите новое значение второго октета $a._?_.jjj.iii от 0 до 255:"
-			read z
-			expr $z : '-\?[0-9]\+$' >/dev/null && type_z=1 || type_z=0
+			echo	"$tempVarZ Введено недопустимое значение второго октета"
+			echo 	"Ведите новое значение второго октета $FirstOctet._?_.jjj.iii от 0 до 255:"
+			read tempVarSecond
+			expr $tempVarSecond : '-\?[0-9]\+$' >/dev/null && type_Second=1 || type_Second=0
 	fi
 done
-b=$z
+SecondOctet=$tempVarSecond
 until [ $correct_g -eq 1 ]
 do
-	if (( type_y==1 && y >= 0 && y <= 255 ))
+	if (( type_Third == 1 && tempVarThird >= 0 && tempVarThird <= 255 ))
 		then
-#			echo "$y допустимое значение"
+#			echo "$tempVarThird допустимое значение"
 			break
 		else 
 			echo	"Введено недопустимое значение третьего октета"
-			echo 	"Ведите новое значение третьего октета $a.$b._?_.iii от 0 до 255:"
-			read y
-			expr $y : '-\?[0-9]\+$' >/dev/null && type_y=1 || type_y=0
+			echo 	"Ведите новое значение третьего октета $FirstOctet.$SecondOctet._?_.iii от 0 до 255:"
+			read tempVarThird
+			expr $tempVarThird : '-\?[0-9]\+$' >/dev/null && type_Third=1 || type_Third=0
 			
 	fi
 done
-j=$y
+ThirdOctet=$tempVarThird
 until [ $correct_g -eq 1 ]
 do
-	if (( type_x==1 && x >= 1 && x <= 255 ))
+	if (( type_Fourth == 1 && tempVarFourth >= 1 && tempVarFourth <= 255 ))
 		then
-#			echo "$x допустимое значение"
+#			echo "$tempVarFourth допустимое значение"
 			break
 		else 
 			echo	"Введено недопустимое значение четвертого октета"
-			echo 	"Ведите новое значение четвертого октета $a.$b.$j._?_ от 1 до 255:"
-			read x
-			expr $x : '-\?[0-9]\+$' >/dev/null && type_x=1 || type_x=0	
+			echo 	"Ведите новое значение четвертого октета $FirstOctet.$SecondOctet.$ThirdOctet._?_ от 1 до 255:"
+			read tempVarFourth
+			expr $tempVarFourth : '-\?[0-9]\+$' >/dev/null && type_Fourth=1 || type_Fourth=0	
 	fi
 done
-i=$x
+FourthOctet=$tempVarFourth
 echo "Введите конечный адрес aaa.bbb.jjj.iii через пробел" 
-read LIMIT_a LIMIT_b LIMIT_j LIMIT_i
+read LimFirstOc LimSecondOc LimThirdOc LimFourthOc
 # Проверка введенного конечного адреса
-o=$LIMIT_a
-p=$LIMIT_b
-q=$LIMIT_j
-r=$LIMIT_i
+tempLimFirst=$LimFirstOc
+tempLimSecond=$LimSecondOc
+tempLimThird=$LimThirdOc
+tempLimFourth=$LimFourthOc
 
-type_o=0
-type_p=0
-type_q=0
-type_r=0
+typeLimFirst=0
+typeLimSecond=0
+typeLimThird=0
+typeLimFourth=0
 
 # Проверка: является ли ввод числом?
-expr $o : '-\?[0-9]\+$' >/dev/null && type_o=1 || type_o=0
-expr $p : '-\?[0-9]\+$' >/dev/null && type_p=1 || type_p=0
-expr $q : '-\?[0-9]\+$' >/dev/null && type_q=1 || type_q=0
-expr $r : '-\?[0-9]\+$' >/dev/null && type_r=1 || type_r=0
+expr $tempLimFirst : '-\?[0-9]\+$' >/dev/null && typeLimFirst=1 || typeLimFirst=0
+expr $tempLimSecond : '-\?[0-9]\+$' >/dev/null && typeLimSecond=1 || typeLimSecond=0
+expr $tempLimThird : '-\?[0-9]\+$' >/dev/null && typeLimThird=1 || typeLimThird=0
+expr $tempLimFourth : '-\?[0-9]\+$' >/dev/null && typeLimFourth=1 || typeLimFourth=0
 
 until [ $correct_g -eq 1 ]
 do
-	if (( type_o==1 && o >= 1 && o <= 255 ))
+	if (( typeLimFirst==1 && tempLimFirst >= 1 && tempLimFirst <= 255 ))
 		then
-#			echo "$o допустимое значение"
+#			echo "$tempLimFirst допустимое значение"
 			break
 		else 
 			echo	"Введено недопустимое значение первого октета"
 			echo 	"Ведите новое значение первого октета _?_.bbb.jjj.iii от 1 до 255:"
-			read o
-			expr $o : '-\?[0-9]\+$' >/dev/null && type_o=1 || type_o=0
+			read tempLimFirst
+			expr $tempLimFirst : '-\?[0-9]\+$' >/dev/null && typeLimFirst=1 || typeLimFirst=0
 	fi
 done
-LIMIT_a=$o
+LimFirstOc=$tempLimFirst
 until [ $correct_g -eq 1 ]
 do
-	if (( type_p=1 && p >= 0 && p <= 255 ))
+	if (( typeLimSecond==1 && tempLimSecond >= 0 && tempLimSecond <= 255 ))
 		then
-#			echo "$p допустимое значение"
+#			echo "$tempLimSecond допустимое значение"
 			break
 		else 
-			echo	"$p Введено недопустимое значение второго октета"
-			echo 	"Ведите новое значение второго октета $LIMIT_a._?_.jjj.iii от 0 до 255:"
-			read p
-			expr $p : '-\?[0-9]\+$' >/dev/null && type_p=1 || type_p=0
+			echo	"$tempLimSecond Введено недопустимое значение второго октета"
+			echo 	"Ведите новое значение второго октета $LimFirstOc._?_.jjj.iii от 0 до 255:"
+			read tempLimSecond
+			expr $tempLimSecond : '-\?[0-9]\+$' >/dev/null && typeLimSecond=1 || typeLimSecond=0
 	fi
 done
-LIMIT_b=$p
+LimSecondOc=$tempLimSecond
 until [ $correct_g -eq 1 ]
 do
-	if (( type_q==1 && q >= 0 && q <= 255 ))
+	if (( typeLimThird==1 && tempLimThird >= 0 && tempLimThird <= 255 ))
 		then
-#			echo "$q допустимое значение"
+#			echo "$tempLimThird допустимое значение"
 			break
 		else 
 			echo	"Введено недопустимое значение третьего октета"
-			echo 	"Ведите новое значение третьего октета $LIMIT_a.$LIMIT_b._?_.iii от 0 до 255:"
-			read q
-			expr $q : '-\?[0-9]\+$' >/dev/null && type_q=1 || type_q=0
+			echo 	"Ведите новое значение третьего октета $LimFirstOc.$LimSecondOc._?_.iii от 0 до 255:"
+			read tempLimThird
+			expr $tempLimThird : '-\?[0-9]\+$' >/dev/null && typeLimThird=1 || typeLimThird=0
 			
 	fi
 done
-LIMIT_j=$q
+LimThirdOc=$tempLimThird
 until [ $correct_g -eq 1 ]
 do
-	if (( type_r=1 && r >= 1 && r <= 255 ))
+	if (( typeLimFourth==1 && tempLimFourth >= 1 && tempLimFourth <= 255 ))
 		then
-#			echo "$r допустимое значение"
+#			echo "$tempLimFourth допустимое значение"
 			break
 		else 
 			echo	"Введено недопустимое значение четвертого октета"
-			echo 	"Ведите новое значение четвертого октета $LIMIT_a.$LIMIT_b.$LIMIT_j._?_ от 1 до 255:"
-			read r
-			expr $r : '-\?[0-9]\+$' >/dev/null && type_r=1 || type_r=0
+			echo 	"Ведите новое значение четвертого октета $LimFirstOc.$LimSecondOc.$LimThirdOc._?_ от 1 до 255:"
+			read tempLimFourth
+			expr $tempLimFourth : '-\?[0-9]\+$' >/dev/null && typeLimFourth=1 || typeLimFourth=0
 	fi
 done
-LIMIT_i=$r
+LimFourthOc=$tempLimFourth
+    
+echo "Сканируем диапазон адресов $FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet - $LimFirstOc.$LimSecondOc.$LimThirdOc.$LimFourthOc"
 
-echo "Сканируем диапазон адресов $a.$b.$j.$i - $LIMIT_a.$LIMIT_b.$LIMIT_j.$LIMIT_i"
-#Подсчет размера сети
-#let count4th=$LIMIT_i-$x
-#let count3th=$LIMIT_j-$j
-#if [ $count3th == 0]; then
-#	count3th=1
-#fi
-#let netSize=$count4th*$count3th
-#echo $netSize
-#Всякие разные переменные 
 hundred=100
 Zero=0
 #Подсчет количества узлов в сети
-echo "" 														>> index.html
-echo '<html>' 														>> index.html
-echo '<head>' 														>> index.html
-echo '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">' 						>> index.html
-echo '<title>Net Scan</title>'	 											>> index.html
-echo '<style type="text/css">'												>> index.html
-echo	'table {border: 1px solid #000}'										>> index.html
-echo    'tr {}'														>> index.html
-echo   	'.layout {'													>> index.html
-echo   	'width: 100%; /* Ширина всей таблицы в процентах */'								>> index.html
-echo   	'}'														>> index.html
-echo   	'.layout TD {'													>> index.html
-echo   	'vertical-align: top; /* Вертикальное выравнивание в ячейках */'						>> index.html
-echo   	'}'														>> index.html
+echo "<!DOCTYPE html>"														>> index.html
+echo '<html>' 															>> index.html
+echo '<head>' 															>> index.html
+echo '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">' 							>> index.html
+echo "<title>$FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet - $LimFirstOc.$LimSecondOc.$LimThirdOc.$LimFourthOc</title>"	>> index.html
+echo '<style type="text/css">'													>> index.html
+echo	'table {border: 1px solid #000}'											>> index.html
+echo    'tr {}'															>> index.html
+echo   	'.layout {'														>> index.html
+echo   	'width: 100%; /* Ширина всей таблицы в процентах */'									>> index.html
+echo   	'}'															>> index.html
+echo   	'.layout TD {'														>> index.html
+echo   	'vertical-align: top; /* Вертикальное выравнивание в ячейках */'							>> index.html
+echo   	'}'															>> index.html
 # Стиль для ячейки НЕ успешного пинга
-echo   	'TD.leftcolRed {'												>> index.html
-echo    'width: 150px;border: 1px solid #000; background: red;/* Ширина левой колонки */'				>> index.html
-echo   	'}'														>> index.html
+echo   	'TD.leftcolRed {'													>> index.html
+echo    'width: 180px;border: 1px solid #000; background: red;/* Ширина левой колонки */'					>> index.html
+echo   	'}'															>> index.html
 # Стиль для ячейки успешного пинга
-echo   	'TD.leftcolGreen {'												>> index.html
-echo    'width: 150px;border: 1px solid #000;background: green;/* Ширина левой колонки  */'				>> index.html
-echo   	'}'														>> index.html
-echo   	'TD.rightcol {'													>> index.html
-echo    'width: 150px;border: 1px solid #000;/* Ширина правой колонки в процентах */'					>> index.html
-echo   	'}'														>> index.html
-echo  	'</style>'													>> index.html
-echo '</head>' 														>> index.html
-echo '<body>' 														>> index.html
-	echo '<div align = "center">Эта страница сгенерирована автоматически скриптом на bash</div>' 			>> index.html
-	echo '<br>'													>> index.html
-	echo '<table cellspacing="0" cellpadding="0" class="layout">' 							>>index.html
-for ((a; a <= LIMIT_a; a++))
+echo   	'TD.leftcolGreen {'													>> index.html
+echo    'width: 180px;border: 1px solid #000;background: green;/* Ширина левой колонки  */'					>> index.html
+echo   	'}'															>> index.html
+echo   	'TD.rightcol {'														>> index.html
+echo    'width: 180px;border: 1px solid #000;/* Ширина правой колонки в процентах */'						>> index.html
+echo   	'}'															>> index.html
+echo  	'</style>'														>> index.html
+echo '</head>' 															>> index.html
+echo '<body>' 															>> index.html
+	echo "<div align = "center">диапазон адресов $FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet - $LimFirstOc.$LimSecondOc.$LimThirdOc.$LimFourthOc</div>" 			>> index.html
+	echo '<br>'														>> index.html
+	echo '<table cellspacing="0" cellpadding="0" class="layout">' 								>> index.html
+for ((FirstOctet; FirstOctet <= $LimFirstOc; FirstOctet++))
 do
-b=$z
-for ((b; b <= LIMIT_b; b++))
+SecondOctet=$tempVarSecond
+for ((SecondOctet; SecondOctet <= $LimSecondOc; SecondOctet++))
 	do
-	j=$y
-	for ((j; j <= LIMIT_j; j++))
+	ThirdOctet=$tempVarThird
+	for ((ThirdOctet; ThirdOctet <= $LimThirdOc; ThirdOctet++))
 		do
-		i=$x
-		for ((i; i <= $LIMIT_i; i++))
+		FourthOctet=$tempVarFourth
+		for ((FourthOctet; FourthOctet <= $LimFourthOc; FourthOctet++))
 		do
 	#Проверка доступности 'unknown|expired|unreachable|time out'
-	errorcount="$(ping $a.$b.$j.$i -i 0.5 -c 1 2<&1 | grep -icE 'unknown|expired|unreachable|timeout|100% packet loss')" 
+	errorcount="$(ping $FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet -i 0.5 -c 1 2<&1 | grep -icE 'unknown|expired|unreachable|timeout|100% packet loss')" 
+		
 		echo '<tr>' 												>> index.html
 		if [ "$errorcount" != "$Zero"  ]
 		then
 			#Пинг не прошел
 
-				echo '<td class="leftcolRed">'"$a"'.'"$b"'.'"$j"'.'"$i"' - NOT Available</td>' 		>> index.html
-				dnsresult=$(nslookup $a.$b.$j.$i | grep '.4.10'	| awk '{print $4}')
+echo '<td class="leftcolRed">'"$FirstOctet"'.'"$SecondOctet"'.'"$ThirdOctet"'.'"$FourthOctet"' - NOT Available</td>' 	>> index.html
+dnsresult=$(nslookup $FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet | grep '[[:digit:]]\.[[:digit:]]\.[[:digit:]]\.[[:digit:]]'	| awk '{print $4}')
+				echo '<td class="rightcol">' "$dnsresult" '</td>' 					>> index.html
 				sed -i 's/find/ /g' index.html
-				echo '<td class="rightcol">'"$dnsresult"'</td>' 					>> index.html
-				echo ""$a"."$b"."$j"."$i" - NOT Available"
+				echo "$FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet - NOT Available"
 		else
 			#Пинг прошел
-				echo '<td class="leftcolGreen">'"$a"'.'"$b"'.'"$j"'.'"$i"' - Available</td>' 		>> index.html
-				dnsresult=$(nslookup $a.$b.$j.$i | grep '.4.10'	| awk '{print $4}')
+echo '<td class="leftcolGreen">'"$FirstOctet"'.'"$SecondOctet"'.'"$ThirdOctet"'.'"$FourthOctet"' - Available</td>' 	>> index.html
+dnsresult=$(nslookup $FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet | grep '[[:digit:]]\.[[:digit:]]\.[[:digit:]]\.[[:digit:]]'	| awk '{print $4}')
+				echo '<td class="rightcol">' "$dnsresult" '</td>' 					>> index.html
 				sed -i 's/find/ /g' index.html
-				echo '<td class="rightcol">'"$dnsresult"'</td>' 					>> index.html
-				echo ""$a"."$b"."$j"."$i" - Available"
+				echo "$FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet -  Available"
 		fi
 
-		if (( $i < $LIMIT_i))
+		if (( $FourthOctet < $LimFourthOc))
 			then 
-				let i=$i+1
+				let FourthOctet=$FourthOctet+1
 			else
 				break
 		fi
 	#Проверка доступности 'unknown|expired|unreachable|time out'
-	errorcount="$(ping $a.$b.$j.$i -i 0.5 -c 1 2<&1 | grep -icE 'unknown|expired|unreachable|timeout|100% packet loss')" 
-
+	errorcount="$(ping $FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet -i 0.5 -c 1 2<&1 | grep -icE 'unknown|expired|unreachable|timeout|100% packet loss')" 
+		
+															>> index.html
 		if [ "$errorcount" != "$Zero"  ]
 		then
 			#Пинг не прошел
 
-				echo '<td class="leftcolRed">'"$a"'.'"$b"'.'"$j"'.'"$i"' - NOT Available</td>' 		>> index.html
-				dnsresult=$(nslookup $a.$b.$j.$i | grep '.4.10'	| awk '{print $4}')
+echo '<td class="leftcolRed">'"$FirstOctet"'.'"$SecondOctet"'.'"$ThirdOctet"'.'"$FourthOctet"' - NOT Available</td>' 	>> index.html
+dnsresult=$(nslookup $FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet | grep '[[:digit:]]\.[[:digit:]]\.[[:digit:]]\.[[:digit:]]'	| awk '{print $4}')
+				echo '<td class="rightcol">' "$dnsresult" '</td>' 					>> index.html
 				sed -i 's/find/ /g' index.html
-				echo '<td class="rightcol">'"$dnsresult"'</td>' 					>> index.html
-				echo ""$a"."$b"."$j"."$i" - NOT Available"
+				echo "$FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet - NOT Available"
 		else
 			#Пинг прошел
-				echo '<td class="leftcolGreen">'"$a"'.'"$b"'.'"$j"'.'"$i"' - Available</td>' 		>> index.html
-				dnsresult=$(nslookup $a.$b.$j.$i | grep '.4.10'	| awk '{print $4}')
+echo '<td class="leftcolGreen">'"$FirstOctet"'.'"$SecondOctet"'.'"$ThirdOctet"'.'"$FourthOctet"' - Available</td>' 	>> index.html
+dnsresult=$(nslookup $FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet | grep '[[:digit:]]\.[[:digit:]]\.[[:digit:]]\.[[:digit:]]'	| awk '{print $4}')
+				echo '<td class="rightcol">' "$dnsresult" '</td>' 					>> index.html
 				sed -i 's/find/ /g' index.html
-				echo '<td class="rightcol">'"$dnsresult"'</td>' 					>> index.html
-				echo ""$a"."$b"."$j"."$i" - Available"
+				echo "$FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet -  Available"
 		fi
 		echo '</tr>' 					                        				>> index.html
 			done	
