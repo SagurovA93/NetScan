@@ -1,8 +1,13 @@
 #!/bin/bash
 
+<<<<<<< HEAD
+cd $HOME/logs/log5
+rm index.html
+=======
 exec 2>$0.err
 cd $HOME/NetScan/Logs
 rm index.html 
+>>>>>>> 406685f1af878ba979343f3dae4cb7930a99c7bd
 touch index.html
 
 
@@ -166,6 +171,39 @@ echo "Сканируем диапазон адресов $FirstOctet.$SecondOcte
 hundred=100
 Zero=0
 #Подсчет количества узлов в сети
+<<<<<<< HEAD
+echo "<!DOCTYPE html>"													>> index.html
+echo '<html>' 														>> index.html
+echo '<head>' 														>> index.html
+echo '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">' 						>> index.html
+echo '<title>Net Scan</title>'	 											>> index.html
+echo '<style type="text/css">'												>> index.html
+echo	'table {border: 1px solid #000}'										>> index.html
+echo    'tr {}'														>> index.html
+echo   	'.layout {'													>> index.html
+echo   	'width: 100%; /* Ширина всей таблицы в процентах */'								>> index.html
+echo   	'}'														>> index.html
+echo   	'.layout TD {'													>> index.html
+echo   	'vertical-align: top; /* Вертикальное выравнивание в ячейках */'						>> index.html
+echo   	'}'														>> index.html
+# Стиль для ячейки НЕ успешного пинга
+echo   	'TD.leftcolRed {'												>> index.html
+echo    'width: 180px;border: 1px solid #000; background: red;/* Ширина левой колонки */'				>> index.html
+echo   	'}'														>> index.html
+# Стиль для ячейки успешного пинга
+echo   	'TD.leftcolGreen {'												>> index.html
+echo    'width: 180px;border: 1px solid #000;background: green;/* Ширина левой колонки  */'				>> index.html
+echo   	'}'														>> index.html
+echo   	'TD.rightcol {'													>> index.html
+echo    'width: 180px;border: 1px solid #000;/* Ширина правой колонки в процентах */'					>> index.html
+echo   	'}'														>> index.html
+echo  	'</style>'													>> index.html
+echo '</head>' 														>> index.html
+echo '<body>' 														>> index.html
+	echo '<div align = "center">Эта страница сгенерирована автоматически скриптом на bash</div>' 			>> index.html
+	echo '<br>'													>> index.html
+	echo '<table cellspacing="0" cellpadding="0" class="layout">' 							>> index.html
+=======
 echo "<!DOCTYPE html>"														>> index.html
 echo '<html>' 															>> index.html
 echo '<head>' 															>> index.html
@@ -197,6 +235,7 @@ echo '<body>' 															>> index.html
 	echo "<div align = "center">диапазон адресов $FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet - $LimFirstOc.$LimSecondOc.$LimThirdOc.$LimFourthOc</div>" 			>> index.html
 	echo '<br>'														>> index.html
 	echo '<table cellspacing="0" cellpadding="0" class="layout">' 								>> index.html
+>>>>>>> 406685f1af878ba979343f3dae4cb7930a99c7bd
 for ((FirstOctet; FirstOctet <= $LimFirstOc; FirstOctet++))
 do
 SecondOctet=$tempVarSecond
