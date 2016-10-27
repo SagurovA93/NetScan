@@ -2,7 +2,9 @@
 
 exec 2>$0.err
 cd $HOME/NetScan/Logs
-rm index$Num.html 
+#rm index$Num.html 
+echo Введи номер лога
+read Num
 touch index$Num.html
 
 
@@ -166,37 +168,37 @@ echo "Сканируем диапазон адресов $FirstOctet.$SecondOcte
 hundred=100
 Zero=0
 #Подсчет количества узлов в сети
-echo "<!DOCTYPE html>"														>> index$Num.html
-echo '<html>' 															>> index$Num.html
-echo '<head>' 															>> index$Num.html
-echo '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">' 							>> index$Num.html
+echo "<!DOCTYPE html>"												>> index$Num.html
+echo '<html>' 													>> index$Num.html
+echo '<head>' 													>> index$Num.html
+echo '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">' 					>> index$Num.html
 echo "<title>$FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet - $LimFirstOc.$LimSecondOc.$LimThirdOc.$LimFourthOc</title>"	>> index$Num.html
-echo '<style type="text/css">'													>> index$Num.html
-echo	'table {border: 1px solid #000}'											>> index$Num.html
-echo    'tr {}'															>> index$Num.html
-echo   	'.layout {'														>> index$Num.html
-echo   	'width: 100%; /* Ширина всей таблицы в процентах */'									>> index$Num.html
-echo   	'}'															>> index$Num.html
-echo   	'.layout TD {'														>> index$Num.html
-echo   	'vertical-align: top; /* Вертикальное выравнивание в ячейках */'							>> index$Num.html
-echo   	'}'															>> index$Num.html
+echo '<style type="text/css">'											>> index$Num.html
+echo	'table {border: 1px solid #000}'									>> index$Num.html
+echo    'tr {}'													>> index$Num.html
+echo   	'.layout {'												>> index$Num.html
+echo   	'width: 100%; /* Ширина всей таблицы в процентах */'							>> index$Num.html
+echo   	'}'													>> index$Num.html
+echo   	'.layout TD {'												>> index$Num.html
+echo   	'vertical-align: top; /* Вертикальное выравнивание в ячейках */'					>> index$Num.html
+echo   	'}'													>> index$Num.html
 # Стиль для ячейки НЕ успешного пинга
-echo   	'TD.leftcolRed {'													>> index$Num.html
-echo    'width: 180px;border: 1px solid #000; background: red;/* Ширина левой колонки */'					>> index$Num.html
-echo   	'}'															>> index$Num.html
+echo   	'TD.leftcolRed {'											>> index$Num.html
+echo    'width: 180px;border: 1px solid #000; background: red;/* Ширина левой колонки */'			>> index$Num.html
+echo   	'}'													>> index$Num.html
 # Стиль для ячейки успешного пинга
-echo   	'TD.leftcolGreen {'													>> index$Num.html
-echo    'width: 180px;border: 1px solid #000;background: green;/* Ширина левой колонки  */'					>> index$Num.html
-echo   	'}'															>> index$Num.html
-echo   	'TD.rightcol {'														>> index$Num.html
-echo    'width: 180px;border: 1px solid #000;/* Ширина правой колонки в процентах */'						>> index$Num.html
-echo   	'}'															>> index$Num.html
-echo  	'</style>'														>> index$Num.html
-echo '</head>' 															>> index$Num.html
-echo '<body>' 															>> index$Num.html
-	echo "<div align = "center">диапазон адресов $FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet - $LimFirstOc.$LimSecondOc.$LimThirdOc.$LimFourthOc</div>" 			>> index$Num.html
-	echo '<br>'														>> index$Num.html
-	echo '<table cellspacing="0" cellpadding="0" class="layout">' 								>> index$Num.html
+echo   	'TD.leftcolGreen {'											>> index$Num.html
+echo    'width: 180px;border: 1px solid #000;background: green;/* Ширина левой колонки  */'			>> index$Num.html
+echo   	'}'													>> index$Num.html
+echo   	'TD.rightcol {'												>> index$Num.html
+echo    'width: 180px;border: 1px solid #000;/* Ширина правой колонки в процентах */'				>> index$Num.html
+echo   	'}'													>> index$Num.html
+echo  	'</style>'												>> index$Num.html
+echo '</head>' 													>> index$Num.html
+echo '<body>' 													>> index$Num.html
+	echo "<div align = "center">диапазон адресов $FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet - $LimFirstOc.$LimSecondOc.$LimThirdOc.$LimFourthOc</div>" 										>> index$Num.html
+	echo '<br>'												>> index$Num.html
+	echo '<table cellspacing="0" cellpadding="0" class="layout">' 						>> index$Num.html
 for ((FirstOctet; FirstOctet <= $LimFirstOc; FirstOctet++))
 do
 SecondOctet=$tempVarSecond
@@ -211,21 +213,21 @@ for ((SecondOctet; SecondOctet <= $LimSecondOc; SecondOctet++))
 	#Проверка доступности 'unknown|expired|unreachable|time out'
 	errorcount="$(ping $FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet -i 0.5 -c 1 2<&1 | grep -icE 'unknown|expired|unreachable|timeout|100% packet loss')" 
 		
-		echo '<tr>' 												>> index$Num.html
+		echo '<tr>' 											>> index$Num.html
 		if [ "$errorcount" != "$Zero"  ]
 		then
 			#Пинг не прошел
 
-echo '<td class="leftcolRed">'"$FirstOctet"'.'"$SecondOctet"'.'"$ThirdOctet"'.'"$FourthOctet"' - NOT Available</td>' 	>> index$Num.html
-dnsresult=$(nslookup $FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet | grep '[[:digit:]]\.[[:digit:]]\.[[:digit:]]\.[[:digit:]]'	| awk '{print $4}')
-				echo '<td class="rightcol">' "$dnsresult" '</td>' 					>> index$Num.html
+echo '<td class="leftcolRed">'"$FirstOctet"'.'"$SecondOctet"'.'"$ThirdOctet"'.'"$FourthOctet"' - NOT Available</td>' >> index$Num.html
+dnsresult=$(nslookup $FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet | grep "$FourthOctet.$ThirdOctet.$SecondOctet.$FirstOctet"	| awk '{print $4}')
+				echo '<td class="rightcol">' "$dnsresult" '</td>' 				>> index$Num.html
 				sed -i 's/find/ /g' index$Num.html
 				echo "$FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet - NOT Available"
 		else
 			#Пинг прошел
-echo '<td class="leftcolGreen">'"$FirstOctet"'.'"$SecondOctet"'.'"$ThirdOctet"'.'"$FourthOctet"' - Available</td>' 	>> index$Num.html
-dnsresult=$(nslookup $FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet | grep '[[:digit:]]\.[[:digit:]]\.[[:digit:]]\.[[:digit:]]'	| awk '{print $4}')
-				echo '<td class="rightcol">' "$dnsresult" '</td>' 					>> index$Num.html
+echo '<td class="leftcolGreen">'"$FirstOctet"'.'"$SecondOctet"'.'"$ThirdOctet"'.'"$FourthOctet"' - Available</td>' >> index$Num.html
+dnsresult=$(nslookup $FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet | grep "$FourthOctet.$ThirdOctet.$SecondOctet.$FirstOctet"	| awk '{print $4}')
+				echo '<td class="rightcol">' "$dnsresult" '</td>' 				>> index$Num.html
 				sed -i 's/find/ /g' index$Num.html
 				echo "$FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet -  Available"
 		fi
@@ -239,32 +241,32 @@ dnsresult=$(nslookup $FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet | grep '[
 	#Проверка доступности 'unknown|expired|unreachable|time out'
 	errorcount="$(ping $FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet -i 0.5 -c 1 2<&1 | grep -icE 'unknown|expired|unreachable|timeout|100% packet loss')" 
 		
-															>> index$Num.html
+														>> index$Num.html
 		if [ "$errorcount" != "$Zero"  ]
 		then
 			#Пинг не прошел
 
-echo '<td class="leftcolRed">'"$FirstOctet"'.'"$SecondOctet"'.'"$ThirdOctet"'.'"$FourthOctet"' - NOT Available</td>' 	>> index$Num.html
-dnsresult=$(nslookup $FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet | grep '[[:digit:]]\.[[:digit:]]\.[[:digit:]]\.[[:digit:]]'	| awk '{print $4}')
-				echo '<td class="rightcol">' "$dnsresult" '</td>' 					>> index$Num.html
+echo '<td class="leftcolRed">'"$FirstOctet"'.'"$SecondOctet"'.'"$ThirdOctet"'.'"$FourthOctet"' - NOT Available</td>' >> index$Num.html
+dnsresult=$(nslookup $FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet | grep "$FourthOctet.$ThirdOctet.$SecondOctet.$FirstOctet"	| awk '{print $4}')
+				echo '<td class="rightcol">' "$dnsresult" '</td>' 				>> index$Num.html
 				sed -i 's/find/ /g' index$Num.html
 				echo "$FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet - NOT Available"
 		else
 			#Пинг прошел
-echo '<td class="leftcolGreen">'"$FirstOctet"'.'"$SecondOctet"'.'"$ThirdOctet"'.'"$FourthOctet"' - Available</td>' 	>> index$Num.html
-dnsresult=$(nslookup $FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet | grep '[[:digit:]]\.[[:digit:]]\.[[:digit:]]\.[[:digit:]]'	| awk '{print $4}')
-				echo '<td class="rightcol">' "$dnsresult" '</td>' 					>> index$Num.html
+echo '<td class="leftcolGreen">'"$FirstOctet"'.'"$SecondOctet"'.'"$ThirdOctet"'.'"$FourthOctet"' - Available</td>' >> index$Num.html
+dnsresult=$(nslookup $FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet | grep "$FourthOctet.$ThirdOctet.$SecondOctet.$FirstOctet"	| awk '{print $4}')
+				echo '<td class="rightcol">' "$dnsresult" '</td>' 				>> index$Num.html
 				sed -i 's/find/ /g' index$Num.html
 				echo "$FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet -  Available"
 		fi
-		echo '</tr>' 					                        				>> index$Num.html
+		echo '</tr>' 					                        			>> index$Num.html
 			done	
 		done
 	done
 done
-	echo '</table>' 												>> index$Num.html
-	echo '</body>' 													>> index$Num.html
-	echo '</html>' 													>> index$Num.html
+	echo '</table>' 											>> index$Num.html
+	echo '</body>' 												>> index$Num.html
+	echo '</html>' 												>> index$Num.html
 exit 0
 
 #-ge - больше или равно
