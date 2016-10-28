@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd /home/sad/scripts/
+cd /home/sad/
 echo "Введи имя файла:"
 read NewFileName
 if [ -f $NewFileName ] 
