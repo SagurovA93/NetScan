@@ -1,13 +1,50 @@
 #!/bin/bash
 
 exec 2>$0.err
-cd $HOME/NetScan/Logs
-#rm index$Num.html 
-echo Введи номер лога
-read Num
-touch index$Num.html
+echo "По умолчанию логи пишутся в $HOME/ntsc_logs"
+mkdir $HOME/ntsc_logs
+cd $HOME/ntsc_logs
 
+#Скрипт проверки и записи/ведения логов 
 
+	function create_new_file (){
+		touch $NewfileName.html
+	}
+	
+	function delete_file () {
+		rm $NewfileName.html
+	}
+
+echo "Как назовем файл?"
+read NewfileName
+if [ -f $NewfileName.html ]
+	then 
+	echo "Файл с именем $NewfileName.html уже существует. Перезаписать? [y/n]"
+	read myAnswer
+		until [[ "$myAnswer" ==  "y" || "$myAnswer" ==  "n" ]]
+		do
+		echo "Файл с именем $filename уже существует. Перезаписать? [y/n]"
+		read  myAnswer
+		done
+		
+		case $myAnswer in
+			
+			y)
+				echo "Перезаписываю файл $NewfileName.html"
+				delete_file
+				create_new_file
+			;;
+			n)
+				echo "Работа завершена с ошибкой: файл $NewfileName.html уже существует."
+				exit 1
+			;;
+		esac
+		
+		else
+		echo "Записываю файл $NewfileName.html"
+		create_new_file
+			
+fi
 
 echo "Введите начальный адрес aaa.bbb.jjj.iii через пробел" 
 read FirstOctet SecondOctet ThirdOctet FourthOctet
@@ -168,37 +205,40 @@ echo "Сканируем диапазон адресов $FirstOctet.$SecondOcte
 hundred=100
 Zero=0
 #Подсчет количества узлов в сети
-echo "<!DOCTYPE html>"												>> index$Num.html
-echo '<html>' 													>> index$Num.html
-echo '<head>' 													>> index$Num.html
-echo '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">' 					>> index$Num.html
-echo "<title>$FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet - $LimFirstOc.$LimSecondOc.$LimThirdOc.$LimFourthOc</title>"	>> index$Num.html
-echo '<style type="text/css">'											>> index$Num.html
-echo	'table {border: 1px solid #000}'									>> index$Num.html
-echo    'tr {}'													>> index$Num.html
-echo   	'.layout {'												>> index$Num.html
-echo   	'width: 100%; /* Ширина всей таблицы в процентах */'							>> index$Num.html
-echo   	'}'													>> index$Num.html
-echo   	'.layout TD {'												>> index$Num.html
-echo   	'vertical-align: top; /* Вертикальное выравнивание в ячейках */'					>> index$Num.html
-echo   	'}'													>> index$Num.html
+echo "<!DOCTYPE html>"																																			>> $NewfileName.html
+echo '<html>' 																																					>> $NewfileName.html
+echo '<head>' 																																					>> $NewfileName.html
+echo '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">' 																						>> $NewfileName.html
+echo "<title>$FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet - $LimFirstOc.$LimSecondOc.$LimThirdOc.$LimFourthOc</title>"										>> $NewfileName.html
+echo '<style type="text/css">'																																	>> $NewfileName.html
+echo	'table {border: 1px solid #000}'																														>> $NewfileName.html
+echo    'tr {}'																																					>> $NewfileName.html
+echo   	'.layout {'																																				>> $NewfileName.html
+echo   	'width: 100%; /* Ширина всей таблицы в процентах */'																									>> $NewfileName.html
+echo   	'}'																																						>> $NewfileName.html
+echo   	'.layout TD {'																																			>> $NewfileName.html
+echo   	'vertical-align: top; /* Вертикальное выравнивание в ячейках */'																						>> $NewfileName.html
+echo   	'}'																																						>> $NewfileName.html
 # Стиль для ячейки НЕ успешного пинга
-echo   	'TD.leftcolRed {'											>> index$Num.html
-echo    'width: 180px;border: 1px solid #000; background: red;/* Ширина левой колонки */'			>> index$Num.html
-echo   	'}'													>> index$Num.html
+echo   	'TD.leftcolRed {'																																		>> $NewfileName.html
+echo    'width: 180px;border: 1px solid #000; background: red;/* Ширина левой колонки */'																		>> $NewfileName.html
+echo   	'}'																																						>> $NewfileName.html
 # Стиль для ячейки успешного пинга
-echo   	'TD.leftcolGreen {'											>> index$Num.html
-echo    'width: 180px;border: 1px solid #000;background: green;/* Ширина левой колонки  */'			>> index$Num.html
-echo   	'}'													>> index$Num.html
-echo   	'TD.rightcol {'												>> index$Num.html
-echo    'width: 180px;border: 1px solid #000;/* Ширина правой колонки в процентах */'				>> index$Num.html
-echo   	'}'													>> index$Num.html
-echo  	'</style>'												>> index$Num.html
-echo '</head>' 													>> index$Num.html
-echo '<body>' 													>> index$Num.html
-	echo "<div align = "center">диапазон адресов $FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet - $LimFirstOc.$LimSecondOc.$LimThirdOc.$LimFourthOc</div>" 										>> index$Num.html
-	echo '<br>'												>> index$Num.html
-	echo '<table cellspacing="0" cellpadding="0" class="layout">' 						>> index$Num.html
+echo   	'TD.leftcolGreen {'																																		>> $NewfileName.html
+echo    'width: 180px;border: 1px solid #000;background: green;/* Ширина левой колонки  */'																		>> $NewfileName.html
+echo   	'}'																																						>> $NewfileName.html
+echo   	'TD.rightcolDNSreslv {'																																	>> $NewfileName.html
+echo    'width: 180px;border: 1px solid #000;background: #F0FFF0;/* Успешный DNS resolve */'																	>> $NewfileName.html
+echo   	'}'																																						>> $NewfileName.html
+echo   	'TD.rightcol {'																																			>> $NewfileName.html
+echo    'width: 180px;border: 1px solid #000;/* Не получено сведений об хостейме */'																			>> $NewfileName.html
+echo   	'}'																																						>> $NewfileName.html
+echo  	'</style>'																																				>> $NewfileName.html
+echo '</head>' 																																					>> $NewfileName.html
+echo '<body>' 																																					>> $NewfileName.html
+	echo "<div align = "center">диапазон адресов $FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet - $LimFirstOc.$LimSecondOc.$LimThirdOc.$LimFourthOc $(date)</div>" 	>> $NewfileName.html
+	echo '<br>'																																					>> $NewfileName.html
+	echo '<table cellspacing="0" cellpadding="0" class="layout">' 																								>> $NewfileName.html
 for ((FirstOctet; FirstOctet <= $LimFirstOc; FirstOctet++))
 do
 SecondOctet=$tempVarSecond
@@ -213,22 +253,38 @@ for ((SecondOctet; SecondOctet <= $LimSecondOc; SecondOctet++))
 	#Проверка доступности 'unknown|expired|unreachable|time out'
 	errorcount="$(ping $FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet -i 0.5 -c 1 2<&1 | grep -icE 'unknown|expired|unreachable|timeout|100% packet loss')" 
 		
-		echo '<tr>' 											>> index$Num.html
+		echo '<tr>' 																																			>> $NewfileName.html
 		if [ "$errorcount" != "$Zero"  ]
 		then
 			#Пинг не прошел
 
-echo '<td class="leftcolRed">'"$FirstOctet"'.'"$SecondOctet"'.'"$ThirdOctet"'.'"$FourthOctet"' - NOT Available</td>' >> index$Num.html
+echo '<td class="leftcolRed">'"$FirstOctet"'.'"$SecondOctet"'.'"$ThirdOctet"'.'"$FourthOctet"' - NOT Available</td>' 											>> $NewfileName.html
 dnsresult=$(nslookup $FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet | grep "$FourthOctet.$ThirdOctet.$SecondOctet.$FirstOctet"	| awk '{print $4}')
-				echo '<td class="rightcol">' "$dnsresult" '</td>' 				>> index$Num.html
-				sed -i 's/find/ /g' index$Num.html
+				case $dnsresult in
+					
+					find)
+						echo '<td class="rightcol">' "$dnsresult" '</td>' 		>> $NewfileName.html
+						sed -i 's/find/ /g' $NewfileName.html
+						;;
+					*)
+						echo '<td class="rightcolDNSreslv">' "$dnsresult" '</td>' 		>> $NewfileName.html
+						;;
+				esac
 				echo "$FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet - NOT Available"
 		else
 			#Пинг прошел
-echo '<td class="leftcolGreen">'"$FirstOctet"'.'"$SecondOctet"'.'"$ThirdOctet"'.'"$FourthOctet"' - Available</td>' >> index$Num.html
+echo '<td class="leftcolGreen">'"$FirstOctet"'.'"$SecondOctet"'.'"$ThirdOctet"'.'"$FourthOctet"' - Available</td>' 												>> $NewfileName.html
 dnsresult=$(nslookup $FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet | grep "$FourthOctet.$ThirdOctet.$SecondOctet.$FirstOctet"	| awk '{print $4}')
-				echo '<td class="rightcol">' "$dnsresult" '</td>' 				>> index$Num.html
-				sed -i 's/find/ /g' index$Num.html
+				case $dnsresult in
+					
+					find)
+						echo '<td class="rightcol">' "$dnsresult" '</td>' 		>> $NewfileName.html
+						sed -i 's/find/ /g' $NewfileName.html
+						;;
+					*)
+						echo '<td class="rightcolDNSreslv">' "$dnsresult" '</td>' 		>> $NewfileName.html
+						;;
+				esac
 				echo "$FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet -  Available"
 		fi
 
@@ -241,34 +297,49 @@ dnsresult=$(nslookup $FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet | grep "$
 	#Проверка доступности 'unknown|expired|unreachable|time out'
 	errorcount="$(ping $FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet -i 0.5 -c 1 2<&1 | grep -icE 'unknown|expired|unreachable|timeout|100% packet loss')" 
 		
-														>> index$Num.html
+																																								>> $NewfileName.html
 		if [ "$errorcount" != "$Zero"  ]
 		then
 			#Пинг не прошел
 
-echo '<td class="leftcolRed">'"$FirstOctet"'.'"$SecondOctet"'.'"$ThirdOctet"'.'"$FourthOctet"' - NOT Available</td>' >> index$Num.html
+echo '<td class="leftcolRed">'"$FirstOctet"'.'"$SecondOctet"'.'"$ThirdOctet"'.'"$FourthOctet"' - NOT Available</td>'											 >> $NewfileName.html
 dnsresult=$(nslookup $FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet | grep "$FourthOctet.$ThirdOctet.$SecondOctet.$FirstOctet"	| awk '{print $4}')
-				echo '<td class="rightcol">' "$dnsresult" '</td>' 				>> index$Num.html
-				sed -i 's/find/ /g' index$Num.html
+				case $dnsresult in
+					
+					find)
+						echo '<td class="rightcol">' "$dnsresult" '</td>' 		>> $NewfileName.html
+						sed -i 's/find/ /g' $NewfileName.html
+						;;
+					*)
+						echo '<td class="rightcolDNSreslv">' "$dnsresult" '</td>' 		>> $NewfileName.html
+						;;
+				esac
 				echo "$FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet - NOT Available"
 		else
 			#Пинг прошел
-echo '<td class="leftcolGreen">'"$FirstOctet"'.'"$SecondOctet"'.'"$ThirdOctet"'.'"$FourthOctet"' - Available</td>' >> index$Num.html
+echo '<td class="leftcolGreen">'"$FirstOctet"'.'"$SecondOctet"'.'"$ThirdOctet"'.'"$FourthOctet"' - Available</td>' 												>> $NewfileName.html
 dnsresult=$(nslookup $FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet | grep "$FourthOctet.$ThirdOctet.$SecondOctet.$FirstOctet"	| awk '{print $4}')
-				echo '<td class="rightcol">' "$dnsresult" '</td>' 				>> index$Num.html
-				sed -i 's/find/ /g' index$Num.html
+				case $dnsresult in
+					
+					find)
+						echo '<td class="rightcol">' "$dnsresult" '</td>' 		>> $NewfileName.html
+						sed -i 's/find/ /g' $NewfileName.html
+						;;
+					*)
+						echo '<td class="rightcolDNSreslv">' "$dnsresult" '</td>' 		>> $NewfileName.html
+						;;
+				esac
 				echo "$FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet -  Available"
 		fi
-		echo '</tr>' 					                        			>> index$Num.html
+		echo '</tr>' 					                        																								>> $NewfileName.html
 			done	
 		done
 	done
 done
-	echo '</table>' 											>> index$Num.html
-	echo '</body>' 												>> index$Num.html
-	echo '</html>' 												>> index$Num.html
+	echo '</table>' 																																			>> $NewfileName.html
+	echo '</body>' 																																				>> $NewfileName.html
+	echo '</html>' 																																				>> $NewfileName.html
 exit 0
 
 #-ge - больше или равно
 #-lt - меньше или равно
-
