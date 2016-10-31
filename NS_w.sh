@@ -1,9 +1,10 @@
 #!/bin/bash
 
+TodayIs=$(date +%d%b%y)
 exec 2>$0.err
-echo "По умолчанию логи пишутся в $HOME/ntsc_logs"
-mkdir $HOME/ntsc_logs
-cd $HOME/ntsc_logs
+echo "По умолчанию логи пишутся в $HOME/ntsc_logs/$TodayIs"
+mkdir $HOME/ntsc_logs/$TodayIs
+cd $HOME/ntsc_logs/$TodayIs
 
 #Скрипт проверки и записи/ведения логов 
 
