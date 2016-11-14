@@ -239,6 +239,7 @@ echo '</head>' 																																					>> $NewfileName.html
 echo '<body>' 																																					>> $NewfileName.html
 	echo "<div align = "center">диапазон адресов $FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet - $LimFirstOc.$LimSecondOc.$LimThirdOc.$LimFourthOc $(date)</div>" 	>> $NewfileName.html
 	echo '<br>'																																					>> $NewfileName.html
+	echo '<br>'																																					>> $NewfileName.html																																				>> $NewfileName.html
 	echo '<table cellspacing="0" cellpadding="0" class="layout">' 																								>> $NewfileName.html
 for ((FirstOctet; FirstOctet <= $LimFirstOc; FirstOctet++))
 do
@@ -288,7 +289,6 @@ dnsresult=$(nslookup $FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet | grep "$
 				esac
 				echo "$FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet -  Available"
 		fi
-
 		if (( $FourthOctet < $LimFourthOc))
 			then 
 				let FourthOctet=$FourthOctet+1
@@ -339,7 +339,7 @@ dnsresult=$(nslookup $FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet | grep "$
 done
 	echo '</table>' 																																			>> $NewfileName.html
 	echo '</body>' 																																				>> $NewfileName.html
-	echo '</html>' 																																				>> $NewfileName.html
+	echo '</html>'																																				>> $NewfileName.html																																				>> $NewfileName.html
 exit 0
 
 #-ge - больше или равно
