@@ -1,6 +1,7 @@
 #!/bin/bash
 
 TodayIs=$(date +%d%b%y)
+echo $TodayIs
 exec 2>$0.err
 echo "По умолчанию логи пишутся в $HOME/ntsc_logs/$TodayIs"
 mkdir $HOME/ntsc_logs/$TodayIs
@@ -337,9 +338,26 @@ dnsresult=$(nslookup $FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet | grep "$
 		done
 	done
 done
+		#Время окончания скана
+		TimeOfFinish=$(date +%d%b%y_%H:%M:%S)
+		#Подсчет количества успешных пингов и DNS ответов:
+		HowManyPing=$(grep 'leftcolGreen' $NewfileName.html | awk 'END{print NR}')
+		let HowManyPing=$HowManyPing-1
+		HowManyDNSres=$(grep 'rightcolDNSreslv' $NewfileName.html | awk 'END{print NR}')
+		let HowManyDNSres=$HowManyDNSres-1
+		echo "$HowManyPing - количество полученных эхо-ответов"
+		echo "$HowManyDNSres - количество разрешенных DNS имен"
+		echo '<div align = right>' > 				$NewfileName.tmp
+		echo "$HowManyPing - Available hosts" >> 	$NewfileName.tmp
+		echo '<br>'						>>			$NewfileName.tmp
+		echo "$HowManyDNSres - DNS names" >> 		$NewfileName.tmp
+		echo '<br>'							>>		$NewfileName.tmp
+		echo "$TimeOfFinish" 					>>		$NewfileName.tmp
+		echo '</div>' >> 							$NewfileName.tmp
+		sed -i "31r $HOME/ntsc_logs/$TodayIs/$NewfileName.tmp" $HOME/ntsc_logs/$TodayIs/$NewfileName.html
 	echo '</table>' 																																			>> $NewfileName.html
 	echo '</body>' 																																				>> $NewfileName.html
-	echo '</html>'																																				>> $NewfileName.html																																				>> $NewfileName.html
+	echo '</html>'																		>> $NewfileName.html																																				>> $NewfileName.html
 exit 0
 
 #-ge - больше или равно
