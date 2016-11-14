@@ -1,14 +1,14 @@
 #!/bin/bash
-#Cкрипт для запуска по крону (первый диапазон сети с 10.4.0.1 до 10.4.40.255)
+#Cкрипт для запуска по крону (первый диапазон сети с 10.4.0.1 до 10.4.30.255)
 TodayIs=$(date +%d%b%y)
 exec 2>$0.err
 mkdir $HOME/ntsc_logs/$TodayIs
 cd $HOME/ntsc_logs/$TodayIs
-NewfileName=log1
+NewfileName=log2
 #Гвоздями все прибито для автозапуска скрипта.
 FirstOctet=10 
 SecondOctet=4 
-ThirdOctet=0
+ThirdOctet=41
 FourthOctet=1
 tempVarFourth=$FourthOctet
 tempVarThird=$ThirdOctet
@@ -87,7 +87,7 @@ done
 FourthOctet=$tempVarFourth 
 LimFirstOc=10
 LimSecondOc=4
-LimThirdOc=40
+LimThirdOc=80
 LimFourthOc=254
 # Проверка введенного конечного адреса
 tempLimFirst=$LimFirstOc
