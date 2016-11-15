@@ -1,8 +1,8 @@
 #!/bin/bash
-#Скрипт сравнения с помощью diff
-exec 2>$0.err
 #Сегодняшнее число TodayIs
 TodayIs=$(date +%d%b%y)
+$TodayIs>>$0.err
+exec 2>>$0.err
 #Вычисление предыдущего числа месяца и запись в переменную
 day=$(date +%d)
 let Yesterday=$day-1
