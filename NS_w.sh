@@ -239,6 +239,7 @@ echo '</head>' 																																					>> $NewfileName.html
 echo '<body>' 																																					>> $NewfileName.html
 	echo "<div align = "center">диапазон адресов $FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet - $LimFirstOc.$LimSecondOc.$LimThirdOc.$LimFourthOc $(date)</div>" 	>> $NewfileName.html
 	echo '<br>'																																					>> $NewfileName.html
+	echo '<br>'																																					>> $NewfileName.html																																				>> $NewfileName.html
 	echo '<table cellspacing="0" cellpadding="0" class="layout">' 																								>> $NewfileName.html
 for ((FirstOctet; FirstOctet <= $LimFirstOc; FirstOctet++))
 do
@@ -259,7 +260,7 @@ for ((SecondOctet; SecondOctet <= $LimSecondOc; SecondOctet++))
 		then
 			#Пинг не прошел
 
-echo '<td class="leftcolRed">'"$FirstOctet"'.'"$SecondOctet"'.'"$ThirdOctet"'.'"$FourthOctet"' - NOT Available</td>' 											>> $NewfileName.html
+echo '<td class="leftcolRed">' "$FirstOctet"'.'"$SecondOctet"'.'"$ThirdOctet"'.'"$FourthOctet"' - NOT Available</td>' 											>> $NewfileName.html
 dnsresult=$(nslookup $FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet | grep "$FourthOctet.$ThirdOctet.$SecondOctet.$FirstOctet"	| awk '{print $4}')
 				case $dnsresult in
 					
@@ -274,7 +275,7 @@ dnsresult=$(nslookup $FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet | grep "$
 				echo "$FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet - NOT Available"
 		else
 			#Пинг прошел
-echo '<td class="leftcolGreen">'"$FirstOctet"'.'"$SecondOctet"'.'"$ThirdOctet"'.'"$FourthOctet"' - Available</td>' 												>> $NewfileName.html
+echo '<td class="leftcolGreen">' "$FirstOctet"'.'"$SecondOctet"'.'"$ThirdOctet"'.'"$FourthOctet"' - Available</td>' 												>> $NewfileName.html
 dnsresult=$(nslookup $FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet | grep "$FourthOctet.$ThirdOctet.$SecondOctet.$FirstOctet"	| awk '{print $4}')
 				case $dnsresult in
 					
@@ -288,7 +289,6 @@ dnsresult=$(nslookup $FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet | grep "$
 				esac
 				echo "$FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet -  Available"
 		fi
-
 		if (( $FourthOctet < $LimFourthOc))
 			then 
 				let FourthOctet=$FourthOctet+1
@@ -303,7 +303,7 @@ dnsresult=$(nslookup $FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet | grep "$
 		then
 			#Пинг не прошел
 
-echo '<td class="leftcolRed">'"$FirstOctet"'.'"$SecondOctet"'.'"$ThirdOctet"'.'"$FourthOctet"' - NOT Available</td>'											 >> $NewfileName.html
+echo '<td class="leftcolRed">' "$FirstOctet"'.'"$SecondOctet"'.'"$ThirdOctet"'.'"$FourthOctet"' - NOT Available</td>'											 >> $NewfileName.html
 dnsresult=$(nslookup $FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet | grep "$FourthOctet.$ThirdOctet.$SecondOctet.$FirstOctet"	| awk '{print $4}')
 				case $dnsresult in
 					
@@ -318,7 +318,7 @@ dnsresult=$(nslookup $FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet | grep "$
 				echo "$FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet - NOT Available"
 		else
 			#Пинг прошел
-echo '<td class="leftcolGreen">'"$FirstOctet"'.'"$SecondOctet"'.'"$ThirdOctet"'.'"$FourthOctet"' - Available</td>' 												>> $NewfileName.html
+echo '<td class="leftcolGreen">' "$FirstOctet"'.'"$SecondOctet"'.'"$ThirdOctet"'.'"$FourthOctet"' - Available</td>' 												>> $NewfileName.html
 dnsresult=$(nslookup $FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet | grep "$FourthOctet.$ThirdOctet.$SecondOctet.$FirstOctet"	| awk '{print $4}')
 				case $dnsresult in
 					
@@ -337,10 +337,29 @@ dnsresult=$(nslookup $FirstOctet.$SecondOctet.$ThirdOctet.$FourthOctet | grep "$
 		done
 	done
 done
-	echo '</table>' 																																			>> $NewfileName.html
-	echo '</body>' 																																				>> $NewfileName.html
-	echo '</html>' 																																				>> $NewfileName.html
+		#Время окончания скана
+		TimeOfFinish=$(date +%d%b%y_%H:%M:%S)
+		#Подсчет количества успешных пингов и DNS ответов:
+		HowManyPing=$(grep 'leftcolGreen' $NewfileName.html | awk 'END{print NR}')
+		let HowManyPing=$HowManyPing-1
+		HowManyDNSres=$(grep 'rightcolDNSreslv' $NewfileName.html | awk 'END{print NR}')
+		let HowManyDNSres=$HowManyDNSres-1
+		echo "$HowManyPing - количество полученных эхо-ответов"
+		echo "$HowManyDNSres - количество разрешенных DNS имен"
+		echo '<div align = right>' > 				$NewfileName.tmp
+		echo "<a href=$HOME/ntsc_logs/$TodayIs/$NewfileName/ping.txt>$HowManyPing - Available hosts</a>" >> $NewfileName.tmp
+		echo '<br>'														   >>			$NewfileName.tmp
+		echo "<a href=$HOME/ntsc_logs/$TodayIs/$NewfileName/hnames.txt>$HowManyDNSres - DNS names</a>" 	   >> $NewfileName.tmp
+		echo '<br>'							>>		$NewfileName.tmp
+		echo "$TimeOfFinish" 					>>	$NewfileName.tmp
+		echo '</div>' >> 							$NewfileName.tmp
+		sed -i "31r $HOME/ntsc_logs/$TodayIs/$NewfileName.tmp" $HOME/ntsc_logs/$TodayIs/$NewfileName.html
+		rm $HOME/ntsc_logs/$TodayIs/$NewfileName.tmp
+	echo '</table>' 																						>> $NewfileName.html
+	echo '</body>' 																							>> $NewfileName.html
+	echo '</html>'																							>> $NewfileName.html
+		mkdir $NewfileName
+		grep 'leftcolGreen' $NewfileName.html | awk '{print $3}'	> $HOME/ntsc_logs/$TodayIs/$NewfileName/\ping\.txt
+		grep 'rightcolDNSreslv' $NewfileName.html | awk '{print $3}'	> $HOME/ntsc_logs/$TodayIs/$NewfileName/hnames\.txt																																
+		
 exit 0
-
-#-ge - больше или равно
-#-lt - меньше или равно
